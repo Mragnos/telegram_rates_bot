@@ -1,0 +1,71 @@
+import telebot
+from binance_api import Binance
+from tg_api import bot_key
+from telebot import types
+
+token = bot_key()
+bot = telebot.TeleBot(token)
+
+
+crypto_bot = Binance(
+API_KEY='Your_Key',
+API_SECRET='Your_Key'
+)
+
+p_btc = crypto_bot.tickerPrice(symbol='BTCUSDT')
+price_btc = p_btc['price']
+
+p_eth = crypto_bot.tickerPrice(symbol='ETHUSDT')
+price_eth = p_eth['price']
+
+currencies = ['btc', 'eth', 'trx']
+
+
+def create_keyboard():
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    buttons = [types.InlineKeyboardButton(text=c, callback_data=c)
+     for c in currencies]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+@bot.callback_query_handler(func=lambda x: True)
+def callback_handler(callback_query):
+    message = callback_query.message
+    text = callback_query.data
+    currency, value = check_currency_value(text)
+    if currency:
+        bot.send_message(chat_id=message.chat.id, text='Курс {} равен {}'.format(currency, value))
+
+
+def check_currency(message):
+    for c in currencies:
+        if c in message.text.lower():
+            return True
+    return False
+
+
+def check_currency_value(text):
+    currency_values = {'btc': str(price_btc) + ' usdt', 'eth': str(price_eth) + ' usdt'}
+    for currency, value in currency_values.items():
+        if currency in text.lower():
+            return currency, value
+    return None, None
+
+
+@bot.message_handler(func=check_currency)
+def handle_currency(message):
+    currency, value = check_currency_value(message.text)
+    keyboard = create_keyboard()
+    if currency:
+        bot.send_message(chat_id=message.chat.id, text='Курс {} равен {}'.format(currency, value),
+                         reply_markup=keyboard)
+
+
+@bot.message_handler()
+def handle_message(message):
+    bot.send_message(chat_id=message.chat.id, text='Узнай курс btc')
+
+
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
