@@ -36,8 +36,7 @@ currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp']
 
 def create_keyboard():
     keyboard = types.InlineKeyboardMarkup(row_width=3)
-    buttons = [types.InlineKeyboardButton(text=c, callback_data=c)
-     for c in currencies]
+    buttons = [types.InlineKeyboardButton(text=c, callback_data=c) for c in currencies]
     keyboard.add(*buttons)
     return keyboard
 
