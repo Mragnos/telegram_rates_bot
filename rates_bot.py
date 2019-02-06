@@ -18,11 +18,24 @@ price_btc = p_btc['price']
 p_eth = crypto_bot.tickerPrice(symbol='ETHUSDT')
 price_eth = p_eth['price']
 
-currencies = ['btc', 'eth', 'trx']
+p_trx = crypto_bot.tickerPrice(symbol='TRXUSDT')
+price_trx = p_trx['price']
+
+p_bnb = crypto_bot.tickerPrice(symbol='BNBUSDT')
+price_bnb = p_bnb['price']
+
+p_eos = crypto_bot.tickerPrice(symbol='EOSUSDT')
+price_eos = p_eos['price']
+
+p_xrp = crypto_bot.tickerPrice(symbol='XRPUSDT')
+price_xrp = p_xrp['price']
+
+
+currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp']
 
 
 def create_keyboard():
-    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    keyboard = types.InlineKeyboardMarkup(row_width=3)
     buttons = [types.InlineKeyboardButton(text=c, callback_data=c)
      for c in currencies]
     keyboard.add(*buttons)
@@ -46,7 +59,9 @@ def check_currency(message):
 
 
 def check_currency_value(text):
-    currency_values = {'btc': str(price_btc) + ' usdt', 'eth': str(price_eth) + ' usdt'}
+    currency_values = {'btc': str(price_btc) + ' usdt', 'eth': str(price_eth) + ' usdt', 'trx': str(price_trx) +
+                       ' usdt', 'bnb': str(price_bnb) + ' usdt', 'eos': str(price_eos) + ' usdt',
+                       'xrp': str(price_xrp) + ' usdt'}
     for currency, value in currency_values.items():
         if currency in text.lower():
             return currency, value
