@@ -1,1 +1,1 @@
-web: python ratesbot.py
+web: python rates_bot.py
