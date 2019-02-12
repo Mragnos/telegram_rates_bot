@@ -2,6 +2,8 @@ import telebot
 from binance_api import Binance
 from tg_api import bot_key
 from telebot import types
+from cbr_rates import dollar_cbr
+from cbr_rates import euro_cbr
 
 token = bot_key()
 bot = telebot.TeleBot(token)
@@ -30,8 +32,10 @@ price_eos = p_eos['price']
 p_xrp = crypto_bot.tickerPrice(symbol='XRPUSDT')
 price_xrp = p_xrp['price']
 
+p_usd = dollar_cbr()
+p_euro = euro_cbr()
 
-currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp']
+currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp', 'usd', 'euro']
 
 
 def create_keyboard():
@@ -60,7 +64,7 @@ def check_currency(message):
 def check_currency_value(text):
     currency_values = {'btc': str(price_btc) + ' usdt', 'eth': str(price_eth) + ' usdt', 'trx': str(price_trx) +
                        ' usdt', 'bnb': str(price_bnb) + ' usdt', 'eos': str(price_eos) + ' usdt',
-                       'xrp': str(price_xrp) + ' usdt'}
+                       'xrp': str(price_xrp) + ' usdt', 'usd': str(p_usd) + ' rub', 'euro': str(p_euro) + ' rub'}
     for currency, value in currency_values.items():
         if currency in text.lower():
             return currency, value
