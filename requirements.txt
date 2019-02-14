@@ -1,3 +1,4 @@
 pyTelegramBotApi==3.6.6
 telebot==0.0.3
 setuptools==39.1.0
+finviz==1.2.3

@@ -4,6 +4,7 @@ from tg_api import bot_key
 from telebot import types
 from cbr_rates import dollar_cbr
 from cbr_rates import euro_cbr
+import finviz
 
 token = bot_key()
 bot = telebot.TeleBot(token)
@@ -35,7 +36,24 @@ price_xrp = p_xrp['price']
 p_usd = dollar_cbr()
 p_euro = euro_cbr()
 
-currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp', 'usd', 'euro']
+
+facebook = finviz.get_stock('FB')
+price_fb = facebook['Price']
+
+amazon = finviz.get_stock('AMZN')
+price_amzn = amazon['Price']
+
+apple = finviz.get_stock('AAPL')
+price_apple = apple['Price']
+
+netflix = finviz.get_stock('NFLX')
+price_netflix = netflix['Price']
+
+google = finviz.get_stock('GOOGL')
+price_google = google['Price']
+
+currencies = ['btc', 'eth', 'trx', 'bnb', 'eos', 'xrp', 'usd', 'euro', 'facebook', 'amazon', 'apple', 'netflix',
+              'google']
 
 
 def create_keyboard():
@@ -64,7 +82,9 @@ def check_currency(message):
 def check_currency_value(text):
     currency_values = {'btc': str(price_btc) + ' usdt', 'eth': str(price_eth) + ' usdt', 'trx': str(price_trx) +
                        ' usdt', 'bnb': str(price_bnb) + ' usdt', 'eos': str(price_eos) + ' usdt',
-                       'xrp': str(price_xrp) + ' usdt', 'usd': str(p_usd) + ' rub', 'euro': str(p_euro) + ' rub'}
+                       'xrp': str(price_xrp) + ' usdt', 'usd': str(p_usd) + ' rub', 'euro': str(p_euro) + ' rub',
+                       'facebook': str(price_fb) + ' usd', 'amazon': str(price_amzn) + ' usd', 'apple': str(price_apple)
+                       + ' usd', 'netflix': str(price_netflix) + ' usd', 'google': str(price_google) + ' usd'}
     for currency, value in currency_values.items():
         if currency in text.lower():
             return currency, value
