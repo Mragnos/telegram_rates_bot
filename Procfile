@@ -1,1 +1,1 @@
-worker: python rates_bot.py
+web: python rates_bot.py
