@@ -113,8 +113,6 @@ def handle_message(message):
     bot.send_message(chat_id=message.chat.id, text='Узнай курс валют', reply_markup=keyboard)
 
 
-if __name__ == '__main__':
-    bot.polling(none_stop=True)
 
 
 if "HEROKU" in list(os.environ.keys()):
@@ -135,7 +133,9 @@ if "HEROKU" in list(os.environ.keys()):
         return "?", 200
     server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
 else:
-    # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
-    # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
     bot.remove_webhook()
+    bot.polling(none_stop=True)
+
+
+if __name__ == '__main__':
     bot.polling(none_stop=True)
