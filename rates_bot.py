@@ -5,13 +5,16 @@ from telebot import types
 from cbr_rates import dollar_cbr
 from cbr_rates import euro_cbr
 import finviz
-from flask import Flask, request
+
 import os
+from telegram.ext import RegexHandler, Updater
 
 
 token = bot_key()
 bot = telebot.TeleBot(token)
-server = Flask(__name__)
+PORT = int(os.environ.get('PORT', '8443'))
+updater = Updater(token)
+
 
 
 crypto_bot = Binance(
@@ -107,18 +110,9 @@ def handle_currency(message):
                          reply_markup=keyboard)
 
 
-@server.route('/' + token, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=token)
+updater.bot.set_webhook("https://<appname>.herokuapp.com/" + token)
+updater.idle()
 
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url='https://ratesbot.herokuapp.com/' + token)
-    return "ok", 200
-
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
