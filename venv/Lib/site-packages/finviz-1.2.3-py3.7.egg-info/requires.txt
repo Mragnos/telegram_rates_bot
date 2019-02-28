@@ -1,0 +1,5 @@
+lxml
+requests
+aiohttp
+urllib3
+cssselect
