@@ -117,7 +117,7 @@ def getMessage():
 def webhook():
     bot.remove_webhook()
     bot.set_webhook(url='https://ratesbot.herokuapp.com/' + token)
-    return "!", 200
+    return "?", 200
 
 
 if __name__ == "__main__":
