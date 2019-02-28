@@ -104,6 +104,11 @@ def handle_currency(message):
         bot.send_message(chat_id=message.chat.id, text='Укажите нужную валюту',
                          reply_markup=keyboard)
 
+@bot.message_handler()
+def handle_message(message):
+    keyboard = create_keyboard()
+    bot.send_message(chat_id=message.chat.id, text='Узнай курс валют', reply_markup=keyboard)
+
 
 server = Flask(__name__)
 
