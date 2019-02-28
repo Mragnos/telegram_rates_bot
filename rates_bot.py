@@ -13,6 +13,22 @@ token = bot_key()
 bot = telebot.TeleBot(token)
 server = Flask(__name__)
 
+port = int(os.environ.get("PORT", 5000))
+
+
+@server.route('/')
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url="https://ratesbot.herokuapp.com/")  # ссылку изменил
+    return "!", 200
+
+
+@server.route("/bot", methods=['POST'])
+def getMessage():
+    bot.process_new_messages(
+        [telebot.types.Update.de_json(request.stream.read().decode("utf-8")).message])
+    return "ok", 200
+
 
 crypto_bot = Binance(
 API_KEY='Your_Key',
@@ -107,18 +123,4 @@ def handle_currency(message):
                          reply_markup=keyboard)
 
 
-@server.route('/' + token, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url='https://ratesbot.herokuapp.com/' + token)
-    return "?", 200
-
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+server.run(host='0.0.0.0', port=port)
